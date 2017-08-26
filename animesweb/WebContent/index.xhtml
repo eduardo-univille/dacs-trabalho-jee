@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8" />
+	<title>Animes</title>
+</h:head>
+<body>
+	<h:form id="formtable">
+		<p:panel>
+			<p:dataTable value="#{animeControl.getAll()}" var="anime"
+				selectionMode="single" selection="#{animeControl.model}"
+				rowKey="#{anime.id}">
+				<p:column headerText="Nome">
+					<h:outputText value="#{anime.nome}" />
+				</p:column>
+				<p:column headerText="Episódios">
+					<h:outputText value="#{anime.episodios}" />
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="Adicionar"
+						action="#{animeControl.initModel()}" update=":form"
+						oncomplete="PF('form').show()" />
+					<p:commandButton value="Editar" update=":form"
+						oncomplete="PF('form').show()" />
+					<p:commandButton value="Excluir" oncomplete="PF('remove').show()" />
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<h:form id="form">
+		<p:dialog width="500" height="300" modal="true"
+			header="Detalhe do Anime" widgetVar="form">
+			<h:panelGrid id="formDetail" columns="2">
+				<h:outputLabel value="Nome" />
+				<p:inputText value="#{animeControl.model.nome}" />
+				<h:outputLabel value="Episódios" />
+				<p:inputText value="#{animeControl.model.episodios}" />
+				<p:commandButton value="OK" action="#{animeControl.save()}"
+					update=":formtable" onsuccess="PF('form').hide()" />
+				<p:commandButton value="Cancelar" onsuccess="PF('form').hide()" />
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>
+	<h:form id="formremove">
+		<p:dialog width="360" height="45" modal="true"
+			header="Confirma exclusão do Anime?" widgetVar="remove">
+			<h:panelGrid columns="2">
+				<p:commandButton value="OK" action="#{animeControl.remove()}"
+					update=":formtable" onsuccess="PF('remove').hide()" />
+				<p:commandButton value="Cancelar" update=":formtable"
+					onsuccess="PF('remove').hide()" />
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>
+</body>
+</html>
